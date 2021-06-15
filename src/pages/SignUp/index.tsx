@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
 
@@ -9,9 +9,9 @@ import * as Style from './style';
 import logoImg from '../../assets/logo.svg';
 
 const SignUp: React.FC = () => {
-  function handleSubmit(data: any): void {
+  const handleSubmit = useCallback((data: any) => {
     console.log(data);
-  }
+  }, []);
 
   return (
     <Style.Container>
