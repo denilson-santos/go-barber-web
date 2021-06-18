@@ -1,8 +1,11 @@
 import styled, { css } from 'styled-components';
 
+import Tooltip from '../Tooltip';
+
 type InputProps = {
   isFocused: boolean;
   isFilled: boolean;
+  isErrored: boolean;
 };
 
 export const Input = styled.div<InputProps>`
@@ -13,6 +16,12 @@ export const Input = styled.div<InputProps>`
 
   border: 2px solid #232129;
   color: #666360;
+
+  ${({ isErrored }) =>
+    isErrored &&
+    css`
+      border-color: #fa3734;
+    `}
 
   ${({ isFocused }) =>
     isFocused &&
@@ -47,5 +56,19 @@ export const Input = styled.div<InputProps>`
 
   > svg {
     margin-right: 16px;
+  }
+`;
+
+export const Error = styled(Tooltip)`
+  height: 20px;
+  margin-left: 16px;
+
+  span {
+    color: #f4ede8;
+    background: #fa3734;
+
+    &:before {
+      border-color: #fa3734 transparent;
+    }
   }
 `;

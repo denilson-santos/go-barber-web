@@ -6,8 +6,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
 import { IconBaseProps } from 'react-icons/lib';
+import { FiAlertCircle } from 'react-icons/fi';
 
 import * as Style from './style';
 
@@ -18,8 +18,11 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
   const [isFocused, setIsFocused] = useState(false);
+
   const [isFilled, setIsFilled] = useState(false);
+
   const { fieldName, defaultValue, error, registerField } = useField(name);
 
   const handleFocus = useCallback(() => {
@@ -40,7 +43,11 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Style.Input isFocused={isFocused} isFilled={isFilled}>
+    <Style.Input
+      isFocused={isFocused}
+      isFilled={isFilled}
+      isErrored={Boolean(error)}
+    >
       {Icon && <Icon size={20} />}
       <input
         onFocus={handleFocus}
@@ -49,6 +56,12 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         ref={inputRef}
         {...rest}
       />
+
+      {error && (
+        <Style.Error title={error}>
+          <FiAlertCircle color="#fa3734" size={20} />
+        </Style.Error>
+      )}
     </Style.Input>
   );
 };
