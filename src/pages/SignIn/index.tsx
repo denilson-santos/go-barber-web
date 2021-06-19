@@ -8,7 +8,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import * as Style from './style';
 
-import { useAuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import logoImg from '../../assets/logo.svg';
 import getValidationErros from '../../utils/getValidationErrors';
 
@@ -21,7 +21,7 @@ type FormData = {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { signIn } = useAuthContext();
+  const { signIn } = useAuth();
 
   async function handleSubmit(data: FormData): Promise<void> {
     try {
