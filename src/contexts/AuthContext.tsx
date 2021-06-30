@@ -1,34 +1,20 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 import api from '../services/api';
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  created_at: string;
-  updated_at: string;
-};
+import { AuthContextData } from '../types/AuthContextData';
+import { SignInCredentials } from '../types/SignInCredencials';
+import { User } from '../types/User';
 
 type SignInData = {
   token: string;
   user: User;
 };
 
-type SignInCredentials = {
-  email: string;
-  password: string;
-};
+export const AuthContext = createContext<AuthContextData | undefined>(
+  undefined
+);
 
-type AuthContextData = {
-  user?: User;
-  signIn(credentials: SignInCredentials): Promise<void>;
-};
-
-const AuthContext = createContext<AuthContextData | undefined>(undefined);
-
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthContextProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<SignInData | undefined>(() => {
     const token = localStorage.getItem('@GoBarber:token');
     const user = localStorage.getItem('@GoBarber:user');
@@ -52,17 +38,16 @@ export const AuthProvider: React.FC = ({ children }) => {
     setData(response.data);
   }
 
+  function logout(): void {
+    localStorage.removeItem('@GoBarber:token');
+    localStorage.removeItem('@GoBarber:user');
+
+    setData(undefined);
+  }
+
   return (
-    <AuthContext.Provider value={{ user: data?.user, signIn }}>
+    <AuthContext.Provider value={{ user: data?.user, signIn, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export function useAuth(): AuthContextData {
-  const context = useContext(AuthContext);
-
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
-
-  return context;
-}
