@@ -12,6 +12,14 @@ export const ToastContext = createContext<ToastContextData | undefined>(
 export const ToastContextProvider: React.FC = ({ children }) => {
   const [messages, setMessages] = useState<ToastProps[]>([]);
 
+  function removeToast(id: string): void {
+    if (!id) return;
+
+    setMessages((oldMessages) =>
+      oldMessages.filter((message) => message.id !== id)
+    );
+  }
+
   function addToast({ type, title, description }: ToastProps): void {
     const message = {
       id: uuid(),
@@ -21,12 +29,10 @@ export const ToastContextProvider: React.FC = ({ children }) => {
     };
 
     setMessages((oldMessages) => [...oldMessages, message]);
-  }
 
-  function removeToast(id: string): void {
-    if (!id) return;
-
-    setMessages(messages.filter((message) => message.id !== id));
+    setTimeout(() => {
+      removeToast(message.id);
+    }, 3000);
   }
 
   return (

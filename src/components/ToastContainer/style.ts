@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { animated } from 'react-spring';
 
 import { ToastProps } from '../../types/ToastProps';
 
@@ -25,7 +26,7 @@ export const ToastContainer = styled.div`
   overflow: hidden;
 `;
 
-export const Toast = styled.div<ToastProps>`
+export const Toast = styled(animated.div)<ToastProps>`
   & + div {
     margin-top: 8px;
   }
