@@ -4,7 +4,7 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import { FormHandles } from '@unform/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 import Input from '../../components/Input';
@@ -27,6 +27,8 @@ const SignIn: React.FC = () => {
 
   const { addToast } = useToast();
 
+  const history = useHistory();
+
   async function handleSubmit(data: FormData): Promise<void> {
     try {
       formRef.current?.setErrors({});
@@ -41,6 +43,8 @@ const SignIn: React.FC = () => {
       await schema.validate(data, { abortEarly: false });
 
       await signIn({ email: data.email, password: data.password });
+
+      history.push('/dashboard');
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errors = getValidationErros(error);
