@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    image: go-barber-web/app:1.0
+    container_name: go-barber-web-app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 3000:3000
