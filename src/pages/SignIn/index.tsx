@@ -29,7 +29,7 @@ const SignIn: React.FC = () => {
 
   const history = useHistory();
 
-  async function handleSubmit(data: FormData): Promise<void> {
+  const handleSubmit = async (data: FormData): Promise<void> => {
     try {
       formRef.current?.setErrors({});
 
@@ -58,7 +58,7 @@ const SignIn: React.FC = () => {
         });
       }
     }
-  }
+  };
 
   return (
     <Style.Container>
