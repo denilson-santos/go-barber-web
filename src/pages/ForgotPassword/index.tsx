@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { FiLogIn, FiMail } from 'react-icons/fi';
 import * as Yup from 'yup';
@@ -12,20 +12,23 @@ import getValidationErros from '../../utils/getValidationErrors';
 import * as Style from './style';
 
 import logoImg from '../../assets/logo.svg';
+import api from '../../services/api';
 
 type FormData = {
   email: string;
 };
 
 const ForgotPassword: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
   const formRef = useRef<FormHandles>(null);
 
   const { addToast } = useToast();
 
-  const history = useHistory();
-
   const handleSubmit = async (data: FormData): Promise<void> => {
     try {
+      setLoading(true);
+
       formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
@@ -36,8 +39,12 @@ const ForgotPassword: React.FC = () => {
 
       await schema.validate(data, { abortEarly: false });
 
-      history.push('/dashboard');
+      await api.post('/password/forgot', {
+        email: data.email,
+      });
     } catch (error) {
+      setLoading(true);
+
       if (error instanceof Yup.ValidationError) {
         const errors = getValidationErros(error);
 
@@ -50,6 +57,8 @@ const ForgotPassword: React.FC = () => {
             'Ocorreu um erro ao tentar realizar a recuperação de senha, tente novamente!',
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +78,9 @@ const ForgotPassword: React.FC = () => {
               placeholder="E-mail"
             />
 
-            <Button type="submit">Enviar</Button>
+            <Button loading={loading} type="submit">
+              Enviar
+            </Button>
           </Form>
 
           <Link to="/">
