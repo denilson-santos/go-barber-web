@@ -12,6 +12,7 @@ import getValidationErros from '../../utils/getValidationErrors';
 import * as Style from './style';
 
 import logoImg from '../../assets/logo.svg';
+import api from '../../services/api';
 
 type FormData = {
   password: string;
@@ -38,6 +39,24 @@ const ResetPassword: React.FC = () => {
       });
 
       await schema.validate(data, { abortEarly: false });
+
+      const { password, password_confirmation } = data;
+
+      const token = location.search.replace('?token=', '');
+
+      if (!token) throw new Error();
+
+      await api.post('/password/reset', {
+        token,
+        password,
+        password_confirmation,
+      });
+
+      addToast({
+        type: 'success',
+        title: 'Recuperação de senha concluída!',
+        description: 'A sua senha foi alterada com sucesso!',
+      });
 
       history.push('/');
     } catch (error) {

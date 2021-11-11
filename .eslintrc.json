@@ -27,6 +27,7 @@
     "react/prop-types": "off",
     "react/require-default-props": "off",
     "import/prefer-default-export": "off",
+    "no-restricted-globals": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {

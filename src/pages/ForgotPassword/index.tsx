@@ -42,6 +42,13 @@ const ForgotPassword: React.FC = () => {
       await api.post('/password/forgot', {
         email: data.email,
       });
+
+      addToast({
+        type: 'success',
+        title: 'Recuperação de senha',
+        description:
+          'Enviamos um email para você com um link para criação de um a nova senha, cheque sua caixa de entrada para concluir o processo.',
+      });
     } catch (error) {
       setLoading(true);
 
