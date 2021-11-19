@@ -4,7 +4,7 @@ import { FiLogIn, FiMail } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import { FormHandles } from '@unform/core';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useToast } from '../../hooks/useToast';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
