@@ -1,14 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import DayPicker, { DayModifiers } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 
 import { FiClock, FiPower } from 'react-icons/fi';
 import * as Style from './style';
 import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/useAuth';
+import api from '../../services/api';
+
+type MonthAvailabilityItem = {
+  day: number;
+  available: boolean;
+};
 
 export const Dashboard: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [monthAvailability, setMonthAvailability] = useState<
+    MonthAvailabilityItem[]
+  >([]);
+
+  const handleMonthChange = (month: Date): void => {
+    setCurrentMonth(month);
+  };
+
+  const handleDateChange = (day: Date, modifiers: DayModifiers): void => {
+    if (modifiers.available) setSelectedDate(day);
+  };
 
   const { logout, user } = useAuth();
+
+  useEffect(() => {
+    api
+      .get(`/providers/${user?.id}/month-availability`, {
+        params: {
+          year: currentMonth.getFullYear(),
+          month: currentMonth.getMonth(),
+        },
+      })
+      .then((response) => {
+        setMonthAvailability(response.data);
+      });
+  }, [currentMonth, user?.id]);
+
+  const disableDays = useMemo(() => {
+    const dates = monthAvailability
+      .filter((monthDay) => monthDay.available === false)
+      .map((monthDay) => {
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+
+        return new Date(year, month, monthDay.day);
+      });
+
+    return dates;
+  }, [currentMonth, monthAvailability]);
 
   return (
     <Style.Container>
@@ -117,7 +163,33 @@ export const Dashboard: React.FC = () => {
           </Style.Section>
         </Style.Schedule>
 
-        <Style.Calendar />
+        <Style.Calendar>
+          <DayPicker
+            weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
+            fromMonth={new Date()}
+            disabledDays={[{ daysOfWeek: [0, 6] }, ...disableDays]}
+            modifiers={{
+              available: { daysOfWeek: [1, 2, 3, 4, 5] },
+            }}
+            selectedDays={selectedDate}
+            onMonthChange={handleMonthChange}
+            onDayClick={handleDateChange}
+            months={[
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+            ]}
+          />
+        </Style.Calendar>
       </Style.Content>
     </Style.Container>
   );
