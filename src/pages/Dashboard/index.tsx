@@ -5,6 +5,7 @@ import ptBR from 'date-fns/esm/locale/pt-BR/index.js';
 import 'react-day-picker/lib/style.css';
 
 import { FiClock, FiPower } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import * as Style from './style';
 import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/useAuth';
@@ -132,14 +133,13 @@ export const Dashboard: React.FC = () => {
           <img src={logoImg} alt="GoBarber" />
 
           <Style.Profile>
-            <img
-              src="https://yt3.ggpht.com/ytc/AKedOLRphzH9UGDvLpKEi2f9_9-tdsZrDy_xUbyuohFs=s48-c-k-c0x00ffffff-no-rj"
-              alt="Denilson"
-            />
+            <img src={user?.avatar_url} alt="Denilson" />
 
             <div>
               <span>Bem-vindo, </span>
-              <strong>{user?.name}</strong>
+              <Link to="/profile">
+                <strong>{user?.name}</strong>
+              </Link>
             </div>
           </Style.Profile>
 

@@ -51,8 +51,21 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     setData(undefined);
   }
 
+  function updateUser(user: User): void {
+    if (data?.token) {
+      localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+      setData({
+        token: data.token,
+        user,
+      });
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user: data?.user, signIn, logout }}>
+    <AuthContext.Provider
+      value={{ user: data?.user, signIn, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

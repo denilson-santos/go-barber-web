@@ -13,10 +13,18 @@ import * as Style from './style';
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
+  containerStyle?: {
+    [key: string]: number | string;
+  };
   icon?: React.ComponentType<IconBaseProps>;
 };
 
-const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
+const Input: React.FC<InputProps> = ({
+  name,
+  containerStyle,
+  icon: Icon,
+  ...rest
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isFocused, setIsFocused] = useState(false);
@@ -44,6 +52,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
 
   return (
     <Style.Input
+      style={containerStyle}
       isFocused={isFocused}
       isFilled={isFilled}
       isErrored={Boolean(error)}
